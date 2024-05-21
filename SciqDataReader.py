@@ -6,36 +6,68 @@ import pickle
 #This file defines a class that is meant to read in the JEEBench data into more easily handled formats like lists
 def main():
     #Example usage of class
-    filename = "SciQ_dataset/train.json"
-    data_reader = Sciq_reader(filename)
-    data_reader.read_data()
-    data_reader.read_data_to_list()
+    train_file = "SciQ_dataset/train.json"
+    test_file = "SciQ_dataset/test.json"
+    valid_file = "SciQ_dataset/valid.json"
 
-    print(len(data_reader.problem_list))
+    train_reader = Sciq_reader(train_file)
+    train_reader.read_data()
+    train_reader.read_data_to_list()
+    train_data = train_reader.problem_list
+    train_sols = train_reader.prob_list_w_answers
 
+    test_reader = Sciq_reader(test_file)
+    test_reader.read_data()
+    test_reader.read_data_to_list()
+    test_data = test_reader.problem_list
+    test_sols = test_reader.prob_list_w_answers
 
-    data = data_reader.problem_list
+    valid_reader = Sciq_reader(valid_file)
+    valid_reader.read_data()
+    valid_reader.read_data_to_list()
+    valid_data = valid_reader.problem_list
+    valid_sols = valid_reader.prob_list_w_answers
+
+    # print("Length of Training Dataset is : ", len(train_reader.problem_list))
+    #
+    # train_data = train_reader.problem_list
     #Print a few Examples
-    print(data[:5])
+    print("First few Training Examples are : ", train_data[:5])
+    print("First few Testing Examples are : ", test_data[:5])
+    print("First few Validation Examples are : ", valid_data[:5])
 
-    #Print Examples with Solutions
-    data_sols = data_reader.prob_list_w_answers
-    print(data_sols[:5])
-
-    total_length = 0
-    for i in range(len(data)):
-        total_length += len(data[i])
-    print("Average length of query is : ", total_length / len(data))
+    print("First few Training Examples Sols are : ", train_sols[:5])
+    print("First few Testing Examples Sols are : ", test_sols[:5])
+    print("First few Validation Sols are : ", valid_sols[:5])
+    #
+    # #Print Examples with Solutions
+    # train_sols = train_reader.prob_list_w_answers
+    # print(train_sols[:5])
 
     with open('train_data.pkl', 'wb') as file:
         # Serialize and save the list
-        pickle.dump(data, file)
+        pickle.dump(train_data, file)
 
-    with open('train_data.pkl', 'rb') as file:
-        # Load and deserialize the list
-        train_data_test = pickle.load(file)
+    with open('test_data.pkl', 'wb') as file:
+        # Serialize and save the list
+        pickle.dump(test_data, file)
 
-    print(train_data_test[:5])
+    with open('valid_data.pkl', 'wb') as file:
+        # Serialize and save the list
+        pickle.dump(valid_data, file)
+
+    with open('train_sols.pkl', 'wb') as file:
+        # Serialize and save the list
+        pickle.dump(train_sols, file)
+
+    with open('test_sols.pkl', 'wb') as file:
+        # Serialize and save the list
+        pickle.dump(test_sols, file)
+
+    with open('valid_sols.pkl', 'wb') as file:
+        # Serialize and save the list
+        pickle.dump(valid_sols, file)
+
 
 class Sciq_reader:
     def __init__(self, filename, use_random_seed=False, random_seed = 42):
