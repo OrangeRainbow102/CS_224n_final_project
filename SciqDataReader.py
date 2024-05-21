@@ -87,6 +87,7 @@ class Sciq_reader:
             self.prob_list_w_answers.append((point["question"], point["correct_answer"]))
 
     def get_rand_subset(self, num_examples):
+        random.seed(self.random_seed)
         shuffled_list = self.problem_list
         random.shuffle(shuffled_list)
         return shuffled_list[:num_examples]

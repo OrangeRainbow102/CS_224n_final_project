@@ -188,8 +188,26 @@ def get_results(train, embedding_matches, test_embedding, num_results):
     for i in range(len(top_results)):
         idx = top_results[i][1]
         results.append(train[idx])
-
     return results
 
 def calc_cosine_similarity(embedding1, embedding2):
     return cosine_similarity(embedding1.reshape(1, -1), embedding2.reshape(1, -1))
+
+
+def get_top_n_indicies(np_array, n):
+    #n is the top number of matches
+    #Assumes that the i, jth entry is the cosine similarity between the ith test vector and the jth training vector
+    best_matches = np.argsort(np_array, axis=1)
+    return best_matches[:, -n:]
+
+def construct_matches(train_data, test_data, top_indicies):
+    num_test = top_indicies.shape[0]
+    num_matches = top_indicies.shape[1]
+    results = []
+    for i in range(num_test):
+        matches = []
+        for j in range(num_matches):
+            match = top_indicies[i][j]
+            matches.append(train_data[match])
+        results.append((test_data[i], matches))
+    return results
