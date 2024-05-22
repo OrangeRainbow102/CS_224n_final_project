@@ -6,6 +6,8 @@ from Sentence_Transformer import Sentence_Transformer
 from util import *
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
+from nltk.translate.bleu_score import sentence_bleu
+
 
 def main():
 
@@ -14,7 +16,7 @@ def main():
     train_subset_size = 1000
     test_subset_size = 100
     random_seed = 42
-    num_results = 3
+    num_results = 1
 
     train_reader = Sciq_reader(train_filename, use_random_seed=True, random_seed=random_seed)
     train_reader.read_data()
@@ -60,10 +62,10 @@ def main():
     print("Shape of matrch indicies : ", matches_indicies.shape)
 
     results = construct_matches(train_data, test_data, matches_indicies)
-
-    print(type(results))
-    print(len(results))
-    print(results[:5])
+    #
+    # print(type(results))
+    # print(len(results))
+    # print(results[:5])
 
     with open('baseline_results_1.pkl', 'wb') as file:
         # Serialize and save the list
@@ -74,6 +76,36 @@ def main():
         test = pickle.load(file)
 
     assert(test == results)
+
+
+
+
+    print("BLEU Baseline Score is : ", calc_BLEU_score(results))
+
+
+
+def calc_BLEU_score(results):
+    import sacrebleu
+    from evaluate import load
+    sacrebleu = load("sacrebleu")
+    # Results is a list of tuples where each tuple is of the form (query, [result1, result2, ...])
+    BLEU_total = 0
+    num_results_per_test = len(results[0][1])
+    num_tests = len(results)
+
+    for i in range(len(results)):
+        query = results[i][0]
+        #print(query)
+        matches = results[i][1]
+        #print(matches)
+        for j in range(len(matches)):
+            predictions = matches[j]
+            #print(predictions)
+            res = sacrebleu.compute(predictions=[predictions], references=[[query]])
+            BLEU_total += res["score"]
+    return BLEU_total / (num_tests * num_results_per_test)
+
+
 
 
 
