@@ -21,23 +21,13 @@ MAX_SEQ_LENGTH = 256
 NUM_RESULTS = 10
 TOP_K = 32
 
-def read_questions(questions_filepath):
-    questions = []
-    with open(questions_filepath, 'rb') as file:
+def read_data(filepath):
+    result = []
+    with open(filepath, 'rb') as file:
         data = pickle.load(file)
-        questions = [question for question in data]
+        result = [entry for entry in data]
 
-    return questions
-
-
-def read_queries(queries_filepath):
-    queries = []
-    with open(queries_filepath, 'rb') as file:
-        data = pickle.load(file)
-        queries = [(query[1], query[2]) for query in data]
-
-    return queries
-
+    return result
 
 def tokenizer(text):
     tokenized_doc = []
@@ -59,13 +49,13 @@ def lexical_search(queries, questions):
 
     bm25 = BM25Okapi(tokenized_corpus)
 
-    for _, new_query in queries:
-        bm25_scores = bm25.get_scores(tokenizer(new_query))
+    for index, query in queries:
+        bm25_scores = bm25.get_scores(tokenizer(query))
         top_n = np.argpartition(bm25_scores, -NUM_RESULTS)[-NUM_RESULTS:]
         bm25_hits = [{'corpus_id': idx, 'score': bm25_scores[idx]} for idx in top_n]
         bm25_hits = sorted(bm25_hits, key=lambda x: x['score'], reverse=True)
 
-        lex_list.append((new_query, [questions[hit['corpus_id']] for hit in bm25_hits[NUM_RESULTS:]]))
+        lex_list.append((index, [questions[hit['corpus_id']] for hit in bm25_hits[NUM_RESULTS:]]))
 
     return lex_list
 
@@ -79,18 +69,18 @@ def semantic_search(queries, questions):
 
     corpus_embeddings = biencoder.encode(questions, convert_to_tensor=True)
 
-    for _, new_query in queries:
-        question_embedding = biencoder.encode(new_query, convert_to_tensor=True)
+    for index, query in queries:
+        question_embedding = biencoder.encode(query, convert_to_tensor=True)
         hits = util.semantic_search(question_embedding, corpus_embeddings, top_k=TOP_K)
         hits = hits[0]
 
-        cross_inp = [[new_query, questions[hit['corpus_id']]] for hit in hits]
+        cross_inp = [[query, questions[hit['corpus_id']]] for hit in hits]
         cross_scores = cross_encoder.predict(cross_inp)
 
         for idx in range(len(cross_scores)):
             hits[idx]['cross-score'] = cross_scores[idx]
 
-        sem_list.append((new_query, [questions[hit['corpus_id']] for hit in hits[:NUM_RESULTS]]))
+        sem_list.append((index, [questions[hit['corpus_id']] for hit in hits[:NUM_RESULTS]]))
     
     return sem_list
 
@@ -101,14 +91,21 @@ def main():
     queries_filepath = "test_queries_100.pkl"
     questions_filepath = "train_data.pkl"
 
-    questions = read_questions(questions_filepath)
-    queries = read_queries(queries_filepath)
+    questions = read_data(questions_filepath)
+    queries = read_data(queries_filepath)
 
-    lex_list = lexical_search(queries, questions)
-    sem_list = semantic_search(queries, questions)
+    old_query_index = [(query[0], query[1]) for query in queries]
+    new_query_index = [(query[0], query[2]) for query in queries]
 
-    with open('lexical_search_results.pkl', 'wb') as file:
-        pickle.dump(lex_list, file)
+    lex_list_base = lexical_search(old_query_index, questions)
+    lex_list_model = lexical_search(new_query_index, questions)
+    sem_list = semantic_search(new_query_index, questions)
+
+    with open('lexical_search_results_base.pkl', 'wb') as file:
+        pickle.dump(lex_list_base, file)
+
+    with open('lexical_search_results_model.pkl', 'wb') as file:
+        pickle.dump(lex_list_model, file)
 
     with open('semantic_search_results.pkl', 'wb') as file:
         pickle.dump(sem_list, file)
