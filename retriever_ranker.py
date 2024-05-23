@@ -55,7 +55,7 @@ def lexical_search(queries, questions):
         bm25_hits = [{'corpus_id': idx, 'score': bm25_scores[idx]} for idx in top_n]
         bm25_hits = sorted(bm25_hits, key=lambda x: x['score'], reverse=True)
 
-        lex_list.append((index, [questions[hit['corpus_id']] for hit in bm25_hits[NUM_RESULTS:]]))
+        lex_list.append((index, [questions[hit['corpus_id']] for hit in bm25_hits[:NUM_RESULTS]]))
 
     return lex_list
 
