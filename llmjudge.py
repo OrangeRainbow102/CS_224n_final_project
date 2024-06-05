@@ -1,6 +1,7 @@
 from together import Together
 import sys
 import numpy as np
+import time
 
 
 names = {"chase" : "query_generation/chase_together_key.txt"}
@@ -27,6 +28,7 @@ def judge(query_top_k, user="chase"):
 			client = Together(api_key=key)
 	for query, top_k in query_top_k:
 		for question in top_k:
+			time.sleep(.8)
 			msgs = [prompt_prefix + question + prompt_middle + query + prompt_end]
 			response = client.chat.completions.create(
     		model="mistralai/Mistral-7B-Instruct-v0.3",
