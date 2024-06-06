@@ -16,7 +16,7 @@ def main():
     train_subset_size = 1083
     test_subset_size = 97
     random_seed = 42
-    num_results = 5
+    num_results = 15
 
     train_reader = Sciq_reader(train_filename, use_random_seed=True, random_seed=random_seed)
     train_reader.read_data()
@@ -72,15 +72,15 @@ def main():
     # print(len(results))
     # print(results[:5])
 
-    with open('old_baseline_small_synthetic5.pkl', 'wb') as file:
-        # Serialize and save the list
-        pickle.dump(results, file)
+    # with open('old_baseline_small_synthetic5.pkl', 'wb') as file:
+    #     # Serialize and save the list
+    #     pickle.dump(results, file)
 
 
 
     #print("BLEU Baseline Score is : ", calc_BLEU_score(results))
 
-    print(results[:5])
+    print(results[:3])
 
 
 def calc_BLEU_score(results):

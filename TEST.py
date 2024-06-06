@@ -30,6 +30,20 @@ def main():
 
     print(bas_results[:3])
 
+
+    with open('pretrain_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
+        mini_results = pickle.load(file)
+
+    with open('old_baseline_small_synthetic5.pkl', 'rb') as file:
+        baseline_res = pickle.load(file)
+
+    assert(mini_results != baseline_res)
+
+    print(len(mini_results))
+    print(len(baseline_res))
+
+
+
 if __name__ == '__main__':
     main()
 

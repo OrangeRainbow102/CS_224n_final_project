@@ -126,14 +126,38 @@ def main():
     # print(result[:3])
 
     #
-    # EXPERIMENT 4: FINETUNED WITH NO CROSS ENCODER
-    sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions, model='fine_tuned_small_synthetic')
+    # # EXPERIMENT 4: FINETUNED WITH NO CROSS ENCODER
+    # sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions, model='fine_tuned_small_synthetic')
+    # sem_list = sem_list[:-12]
+    # indexes = [sem_list[i][0] for i in range(len(sem_list))]
+    # print(indexes)
+    # result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    # with open('finetune_NOce_small_synthetic5.pkl', 'wb') as file:
+    #     pickle.dump(result, file)
+    # print(result[:3])
+
+
+    # EXPERIMENT 5: PRETRAINED
+    sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions, model='all-MiniLM-L6-v2')
     sem_list = sem_list[:-12]
     indexes = [sem_list[i][0] for i in range(len(sem_list))]
     print(indexes)
     result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
-    with open('finetune_NOce_small_synthetic5.pkl', 'wb') as file:
+    with open('pretrain_all-MiniLM-L6-v2_small_synthetic5.pkl', 'wb') as file:
         pickle.dump(result, file)
+    print("all-MiniLM results : ")
+    print(result[:3])
+
+
+    # EXPERIMENT 6: PRETRAINED
+    sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions, model='allenai-specter')
+    sem_list = sem_list[:-12]
+    indexes = [sem_list[i][0] for i in range(len(sem_list))]
+    print(indexes)
+    result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    with open('pretrain_allenai-specter_small_synthetic5.pkl', 'wb') as file:
+        pickle.dump(result, file)
+    print("allenai-specter results: ")
     print(result[:3])
 
 

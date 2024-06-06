@@ -114,7 +114,9 @@ def main():
     result_post_fine_tuning = model.evaluate(test_evaluator)
     print("Post-Fine Tuning Evaluation on Test Set : ", result_post_fine_tuning)
 
-    model.save('fine_tuned_small_synthetic')
+
+    #REMEMBER TO UNCOMMENT
+    #model.save('fine_tuned_small_synthetic')
 
 
 if __name__ == '__main__':
