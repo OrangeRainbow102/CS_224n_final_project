@@ -12,8 +12,12 @@ def main():
     with open('training_data_small_synthetic.pkl', 'rb') as file:
         data = pickle.load(file)
 
-    cos_acc10 = []
+    cos_acc1 = []
+    cos_acc5 = []
     cos_map10 = []
+
+
+
 
     print(data[:2])
 

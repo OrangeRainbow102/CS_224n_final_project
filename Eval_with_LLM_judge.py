@@ -93,23 +93,26 @@ def main():
 
     new_query_index = [(query[0], query[2]) for query in queries]
 
-    sem_list = semantic_search(new_query_index, questions)
-
-    sem_list = sem_list[:-12]
-    indexes = []
-    for i in range(len(sem_list)):
-        indexes.append(sem_list[i][0])
-    print(indexes)
-
-    result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
-    with open('pretrain_ce_small_synthetic5.pkl', 'wb') as file:
-        pickle.dump(result, file)
-
     # sem_list = semantic_search(new_query_index, questions)
+    # sem_list = sem_list[:-12]
+    # indexes = []
+    # for i in range(len(sem_list)):
+    #     indexes.append(sem_list[i][0])
+    # print(indexes)
+    #
     # result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
-    # with open('pretrain_ce_small_synthetic.pkl', 'wb') as file:
+    # with open('pretrain_ce_small_synthetic5.pkl', 'wb') as file:
     #     pickle.dump(result, file)
-    # print(result[:3])
+
+    sem_list = semantic_search(new_query_index, questions, model='fine_tuned_small_synthetic')
+    sem_list = sem_list[:-12]
+    indexes = [sem_list[i][0] for i in range(len(sem_list))]
+    print(indexes)
+    result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    with open('finetune_ce_small_synthetic5.pkl', 'wb') as file:
+        pickle.dump(result, file)
+    print(result[:3])
+
 
 if __name__ == '__main__':
     main()

@@ -3,7 +3,7 @@ import pickle
 
 
 def main():
-    with open('pretrain_ce_small_synthetic.pkl', 'rb') as file:
+    with open('pretrain_ce_small_synthetic5.pkl', 'rb') as file:
         results = pickle.load(file)
     print(len(results))
 
