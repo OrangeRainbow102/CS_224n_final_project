@@ -93,6 +93,7 @@ def main():
 
     new_query_index = [(query[0], query[2]) for query in queries]
 
+    #EXPERIMENT 1: PRETRAINED WITH CROSS ENCODER
     # sem_list = semantic_search(new_query_index, questions)
     # sem_list = sem_list[:-12]
     # indexes = []
@@ -104,12 +105,34 @@ def main():
     # with open('pretrain_ce_small_synthetic5.pkl', 'wb') as file:
     #     pickle.dump(result, file)
 
-    sem_list = semantic_search(new_query_index, questions, model='fine_tuned_small_synthetic')
+    # EXPERIMENT 2: FINETUNED WITH CROSS ENCODER
+    # sem_list = semantic_search(new_query_index, questions, model='fine_tuned_small_synthetic')
+    # sem_list = sem_list[:-12]
+    # indexes = [sem_list[i][0] for i in range(len(sem_list))]
+    # print(indexes)
+    # result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    # with open('finetune_ce_small_synthetic5.pkl', 'wb') as file:
+    #     pickle.dump(result, file)
+    # print(result[:3])
+
+    # # EXPERIMENT 3: PRETRAINED WITH NO CROSS ENCODER
+    # sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions)
+    # sem_list = sem_list[:-12]
+    # indexes = [sem_list[i][0] for i in range(len(sem_list))]
+    # print(indexes)
+    # result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    # with open('pretrained_NOce_small_synthetic5.pkl', 'wb') as file:
+    #     pickle.dump(result, file)
+    # print(result[:3])
+
+    #
+    # EXPERIMENT 4: FINETUNED WITH NO CROSS ENCODER
+    sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions, model='fine_tuned_small_synthetic')
     sem_list = sem_list[:-12]
     indexes = [sem_list[i][0] for i in range(len(sem_list))]
     print(indexes)
     result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
-    with open('finetune_ce_small_synthetic5.pkl', 'wb') as file:
+    with open('finetune_NOce_small_synthetic5.pkl', 'wb') as file:
         pickle.dump(result, file)
     print(result[:3])
 
