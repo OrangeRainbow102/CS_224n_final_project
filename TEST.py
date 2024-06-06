@@ -42,6 +42,29 @@ def main():
     print(len(mini_results))
     print(len(baseline_res))
 
+    with open('pretrain_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
+        mini_results = pickle.load(file)
+
+    with open('TESTpretrain_allenai-specter_small_synthetic5.pkl', 'rb') as file:
+        baseline_res = pickle.load(file)
+
+    with open('pretrain_all-MiniLM-L6-v2_ce_small_synthetic5.pkl', 'rb') as file:
+        ce_mini_results = pickle.load(file)
+
+    if (mini_results == ce_mini_results):
+        print("Cross encoder had no effect on mini")
+
+
+    with open('pretrain_allenai-specter_small_synthetic5.pkl', 'rb') as file:
+        allenai_res = pickle.load(file)
+
+    with open('pretrain_allenai-specter_ce_small_synthetic5.pkl', 'rb') as file:
+        ce_allenai_res = pickle.load(file)
+
+    if (allenai_res == ce_allenai_res):
+        print("Cross encoder had no effect on allen")
+
+
 
 
 if __name__ == '__main__':

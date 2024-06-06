@@ -5,19 +5,9 @@ from sentence_transformers import InputExample, datasets
 from sentence_transformers.evaluation import InformationRetrievalEvaluator
 import wandb
 from sentence_transformers import SentenceTransformer, losses
-def load_synthetic_small_data(orig_data, rewritten_data):
-    with open(rewritten_data, 'rb')as file:
-        rewrittens = pickle.load(file)
-
-    with open(orig_data, 'rb') as file:
-        orig = pickle.load(file)
-
-
-    rewrittens.sort(key = lambda x: x[0])
-
-    data = [] #Formatted (Synthetic Query, Document)
-    for i in range(len(rewrittens)):
-        data.append((rewrittens[i][2], orig[rewrittens[i][0]]))
+def load_synthetic_large_data(pickle_name):
+    with open(pickle_name, 'rb')as file:
+        data = pickle.load(file)
     return data
 
 def get_eval_dictionaries(eval_data):
@@ -66,13 +56,23 @@ def main():
     model_name = "allenai-specter"
     checkpoint_path = "allenai-specter_checkpoints"
     model_save_name = "fine_tuned_allenai-specter_small_synthetic"
+    data_input = "TODO_PICKLE_FILE_NAME"
 
     print("MODEL IS : ", model_name)
 
-    train_data = load_synthetic_small_data("train_data.pkl", "train_queries_100.pkl")
-    test_data = load_synthetic_small_data("test_data.pkl", "test_queries_100.pkl")
-    val_data = load_synthetic_small_data("valid_data.pkl", "valid_queries_100.pkl")
+    all_data = load_synthetic_large_data(data_input)
 
+    #train test split:
+    train_split = .8
+    val_split = .1
+    test_split = .1
+    num_train_ex = int(train_split * len(all_data))
+    num_val_ex = int(val_split * len(all_data))
+    num_test_ex = len(all_data) - num_train_ex - num_val_ex
+
+    train_data = all_data[: num_train_ex]
+    val_data = all_data[num_train_ex : num_train_ex + num_val_ex ]
+    test_data = all_data[num_train_ex + num_val_ex :]
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train_dloader, test_examples, val_examples = load_binary_dataset_retriever(train_data, test_data, val_data)
