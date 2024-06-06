@@ -51,7 +51,15 @@ def main():
     print("allen SacreBLEU Score is : ", calc_BLEU_score(allen_res))
 
 
+    with open('finetune_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
+        fine_mini_res = pickle.load(file)
 
+    print("Finetuned mini SacreBLEU Score is : ", calc_BLEU_score(fine_mini_res))
+
+    with open('finetune_allenai-specter_small_synthetic5.pkl', 'rb') as file:
+        fine_allen_res = pickle.load(file)
+
+    print("Finetuned allen SacreBLEU Score is : ", calc_BLEU_score(fine_allen_res))
 
 
 
