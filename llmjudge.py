@@ -20,6 +20,10 @@ def calc_percision(bool_array):
 
 
 def judge(query_top_k, user="chase"):
+	with open(names[default_name], 'r+') as f:
+		key = f.readlines()[0]
+		key = key.replace("\n", "")
+		client = Together(api_key=key)
 	results = []
 	if user != default_name:
 		with open(names[user], 'r+') as f:
