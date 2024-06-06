@@ -1,4 +1,14 @@
 
+
+import pickle
+import torch
+from sentence_transformers import InputExample, datasets
+from sentence_transformers.evaluation import InformationRetrievalEvaluator
+import wandb
+from sentence_transformers import SentenceTransformer, losses
+
+
+
 import pickle
 import torch
 from sentence_transformers import InputExample, datasets
@@ -61,63 +71,31 @@ def callback_model(score, epoch, steps):
                "val/score": score})
 def main():
 
-    #See this : https://sbert.net/docs/package_reference/sentence_transformer/losses.html#multiplenegativesrankingloss
 
-
-    train_data = load_synthetic_small_data("train_data.pkl", "train_queries_100.pkl")
-    test_data = load_synthetic_small_data("test_data.pkl", "test_queries_100.pkl")
     val_data = load_synthetic_small_data("valid_data.pkl", "valid_queries_100.pkl")
 
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    train_dloader, test_examples, val_examples = load_binary_dataset_retriever(train_data, test_data, val_data)
+    results = []
+    filename = 'checkpoints/checkpoint-10'
+    model = SentenceTransformer(filename)
 
     val_queries, val_corpus, val_relevent_docs = get_eval_dictionaries(val_data)
     val_evaluator = InformationRetrievalEvaluator(queries=val_queries, corpus=val_corpus, relevant_docs=val_relevent_docs, map_at_k=[10])
-    #val_evaluator.primary_metric = 'cosine_accuracy@10'
+    result = model.evaluate(val_evaluator)
+
+    results.append(result)
+
+    print(results)
 
 
-    test_queries, test_corpus, test_relevent_docs = get_eval_dictionaries(test_data)
-    test_evaluator = InformationRetrievalEvaluator(queries=test_queries, corpus=test_corpus, relevant_docs=test_relevent_docs, map_at_k=[10])
-    #test_evaluator.primary_metric = 'cosine_accuracy@10'
 
 
 
-    model = SentenceTransformer("msmarco-distilbert-base-v4").to(device)
-    loss = losses.MultipleNegativesRankingLoss(model)
 
 
-    num_epochs = 3
-    warmup_steps = int(len(train_dloader) * num_epochs * 0.1)
 
 
-    result_pre_fine_tuning = model.evaluate(test_evaluator)
-    print("Pre-Fine Tuning Evaluation on Test Set: ", result_pre_fine_tuning)
 
-    valresult_pre_fine_tunign = model.evaluate(val_evaluator)
-    print("Pre-Fine Tuning Eval on Eval Set : ", valresult_pre_fine_tunign)
-    print("Primary metric is : ", val_evaluator.primary_metric)
-
-    #model.save('pre-trained_small_synthetic')
-
-    model.fit(train_objectives=[(train_dloader, loss)],
-              epochs=num_epochs,
-              warmup_steps=warmup_steps,
-              show_progress_bar=True,
-              evaluator=val_evaluator,
-              evaluation_steps=10,
-              callback=callback_model,
-              checkpoint_save_steps=10,
-              checkpoint_path='checkpoints')
-
-
-    result_post_fine_tuning = model.evaluate(test_evaluator)
-    print("Post-Fine Tuning Evaluation on Test Set : ", result_post_fine_tuning)
-
-    model.save('fine_tuned_small_synthetic')
 
 
 if __name__ == '__main__':
     main()
-
-

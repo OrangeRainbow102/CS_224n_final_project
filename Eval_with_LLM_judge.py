@@ -8,7 +8,7 @@ import numpy as np
 import pickle
 import torch
 import string
-from llmjudge import judge
+# from llmjudge import judge
 
 
 MAX_SEQ_LENGTH = 256
@@ -100,10 +100,19 @@ def main():
     sem_list = semantic_search(new_query_index, questions)
     result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(2)] #range(len(sem_list))
 
-    print(result)
+    print(result[:5])
 
-    percision = judge(result)
-    print(percision)
+    with open('pretrain_baseline_ce.pkl', 'wb') as file:
+        pickle.dump(result, file)
+
+
+    # print(result)
+    #
+    # percision = judge(result)
+    # print(percision)
+
+
+
 
 
 if __name__ == '__main__':
