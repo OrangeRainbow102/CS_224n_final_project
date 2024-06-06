@@ -71,26 +71,21 @@ def callback_model(score, epoch, steps):
                "val/score": score})
 def main():
 
-
     val_data = load_synthetic_small_data("valid_data.pkl", "valid_queries_100.pkl")
 
     results = []
-    filename = 'checkpoints/checkpoint-10'
-    model = SentenceTransformer(filename)
+    for i in range(40):
+        filename = 'training_small_synthetic_checkpoints/checkpoint-' + str((i + 1) * 10)
+        model = SentenceTransformer(filename)
 
-    val_queries, val_corpus, val_relevent_docs = get_eval_dictionaries(val_data)
-    val_evaluator = InformationRetrievalEvaluator(queries=val_queries, corpus=val_corpus, relevant_docs=val_relevent_docs, map_at_k=[10])
-    result = model.evaluate(val_evaluator)
+        val_queries, val_corpus, val_relevent_docs = get_eval_dictionaries(val_data)
+        val_evaluator = InformationRetrievalEvaluator(queries=val_queries, corpus=val_corpus, relevant_docs=val_relevent_docs, map_at_k=[10])
+        result = model.evaluate(val_evaluator)
 
-    results.append(result)
+        results.append(result)
 
-    print(results)
-
-
-
-
-
-
+    with open('training_data_small_synthetic.pkl', 'wb') as file:
+        pickle.dump(results, file)
 
 
 

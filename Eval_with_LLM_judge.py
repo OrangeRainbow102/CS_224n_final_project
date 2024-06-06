@@ -10,11 +10,9 @@ import torch
 import string
 # from llmjudge import judge
 
-
 MAX_SEQ_LENGTH = 256
-NUM_RESULTS = 10
+NUM_RESULTS = 5
 TOP_K = 32
-
 
 def read_data(filepath):
     result = []
@@ -93,27 +91,25 @@ def main():
 
     queries = read_data(queries_filepath)
 
-    print(queries[:3])
-
     new_query_index = [(query[0], query[2]) for query in queries]
 
     sem_list = semantic_search(new_query_index, questions)
-    result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(2)] #range(len(sem_list))
 
-    print(result[:5])
+    sem_list = sem_list[:-12]
+    indexes = []
+    for i in range(len(sem_list)):
+        indexes.append(sem_list[i][0])
+    print(indexes)
 
-    with open('pretrain_baseline_ce.pkl', 'wb') as file:
+    result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    with open('pretrain_ce_small_synthetic5.pkl', 'wb') as file:
         pickle.dump(result, file)
 
-
-    # print(result)
-    #
-    # percision = judge(result)
-    # print(percision)
-
-
-
-
+    # sem_list = semantic_search(new_query_index, questions)
+    # result = [(queries[sem_list[i][0]][2], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    # with open('pretrain_ce_small_synthetic.pkl', 'wb') as file:
+    #     pickle.dump(result, file)
+    # print(result[:3])
 
 if __name__ == '__main__':
     main()
