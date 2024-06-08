@@ -21,7 +21,7 @@ def read_data(data, metric):
         # cos_pre10.append(data[i]['cosine_precision@10'])
     return met_data
 def graph_data(y_data, title, save_path, y_label='Cosine Percision', label='Cosine Percision @5'):
-    training_steps = [(i + 1)*10 for i in range(len(y_data))]
+    training_steps = [(i + 1)*100 for i in range(len(y_data))]
 
     # Create the plot
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -121,7 +121,7 @@ def collect_data(checkpoint_foder, num_checkpoints):
 
     results = []
     for i in range(num_checkpoints):
-        filename = checkpoint_foder + '/checkpoint-' + str((i + 1) * 10)
+        filename = checkpoint_foder + '/checkpoint-' + str((i + 1) * 100)
         model = SentenceTransformer(filename)
 
         val_queries, val_corpus, val_relevent_docs = get_eval_dictionaries(val_data)
@@ -138,13 +138,16 @@ def main():
     # graph_data(mini_data, title="all-MiniLM-L6-v2 Small Synthetic Training Performance",
     #            save_path="mini_cospre5.png")
 
-    allen_raw_data = collect_data('allenai-specter_checkpoints', num_checkpoints=40)
-    allen_data = read_data(allen_raw_data, 'cosine_precision@5')
-    graph_data(allen_data, title="AllenAI-SPECTER Small Synthetic Training Performance",
-               save_path="allen_cospre5.png")
+    # allen_raw_data = collect_data('allenai-specter_checkpoints', num_checkpoints=40)
+    # allen_data = read_data(allen_raw_data, 'cosine_precision@5')
+    # graph_data(allen_data, title="AllenAI-SPECTER Small Synthetic Training Performance",
+    #            save_path="allen_cospre5.png")
 
 
-
+    marco_large_raw_data = collect_data('msmarco_LARGE_llm_checkpoints2', num_checkpoints=43)
+    marco_large_data = read_data(marco_large_raw_data, 'cosine_precision@5')
+    graph_data(marco_large_data, title="MS Marco Large Synthetic Training Performance",
+               save_path="msmarco_LARGE.png")
 
 
 

@@ -11,8 +11,9 @@ from nltk.translate.bleu_score import sentence_bleu
 
 def main():
 
-    train_pickle = "TODO FROM MACK"
-    test_pickle = "TODO FORM MACK"
+    train_pickle = "llm_query_train_sols.pkl"
+    test_pickle = "llm_query_test_sols.pkl"
+    num_results = 5
     # train_filename = "SciQ_dataset/train.json"
     # test_filename = "SciQ_dataset/test.json"
     # train_subset_size = 1083
@@ -40,6 +41,8 @@ def main():
     train_data = [train_raw[i][1] for i in range(len(train_raw))]
     test_data = [test_raw[i][0] for i in range(len(test_raw))]
 
+    train_subset_size = len(train_data)
+    test_subset_size = len(test_data)
     print("Length of train set : ", len(train_data))
     print("Ex of train is : ", train_data[:3])
     print("Length of test set : ", len(test_data))
@@ -63,7 +66,12 @@ def main():
 
     scores_matrix = np.zeros((test_subset_size, train_subset_size))
     for i in range(test_subset_size):
+        if i % 5 == 0:
+            print("We are calculating for query number ", i, "in test dataset of length ", test_subset_size)
         for j in range(train_subset_size):
+            if j % 1000 == 0:
+                print("We are calculating for query number ", i, "iteration ", j ,"in test dataset of length ", test_subset_size)
+
             score = cosine_similarity(test_embeddings[i].reshape(1, -1), train_embeddings[j].reshape(1, -1))
             scores_matrix[i][j] = score[0,0]
 
@@ -79,16 +87,14 @@ def main():
     # print(len(results))
     # print(results[:5])
 
-    # with open('old_baseline_small_synthetic5.pkl', 'wb') as file:
-    #     # Serialize and save the list
-    #     pickle.dump(results, file)
-
-
+    with open('old_baseline_large_synthetic5.pkl', 'wb') as file:
+        # Serialize and save the list
+        pickle.dump(results, file)
 
     #print("BLEU Baseline Score is : ", calc_BLEU_score(results))
-
     print(results[:3])
-
+    print(len(results))
+    print(len(results[0][1]))
 
 def calc_BLEU_score(results):
     import sacrebleu

@@ -76,6 +76,19 @@ def main():
     print("Old baseline 2 res : ", calc_BLEU_score(old_bas_2_res))
 
 
+    get_BLEU_score("pretrain_msmarco_CE_small_synthetic.pkl")
+    get_BLEU_score("fine_tuned_msmarco_CE_small_synthetic.pkl")
+    get_BLEU_score("pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl")
+    get_BLEU_score("pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl")
+    get_BLEU_score("pretrain_marco_NOce_large_synthetic5.pkl")
+    get_BLEU_score("finetune_marco_ce_large_synthetic5.pkl")
+    get_BLEU_score("finetune_marco_NOce_large_synthetic5.pkl")
+    get_BLEU_score("realfinetune_marco_ce_large_synthetic5.pkl")
+
+def get_BLEU_score(pickle_name):
+    with open(pickle_name, 'rb') as file:
+        results = pickle.load(file)
+    print("Results for : ", pickle_name, "are : ", calc_BLEU_score(results))
 
 if __name__ == '__main__':
     main()
