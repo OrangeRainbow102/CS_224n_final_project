@@ -105,18 +105,7 @@ def main():
     #
     # print(result[:3])
 
-    # #EXPERIMENT 2: Finetuned NO CROSS ENCODER
-    sem_list = semantic_search(new_query_index, questions, model='fine_tuned_marco_LARGEmodel2')
-
-    result = [(queries[sem_list[i][0]], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
-    with open('realfinetune_marco_ce_large_synthetic5.pkl', 'wb') as file:
-        pickle.dump(result, file)
-
-    print(result[:3])
-
-
-
-    # # #EXPERIMENT 3: Finetuned NO CROSS ENCODER
+    # # #EXPERIMENT 2: Finetuned NO CROSS ENCODER
     # sem_list = semantic_search(new_query_index, questions, model='fine_tuned_marco_LARGEmodel2')
     #
     # result = [(queries[sem_list[i][0]], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
@@ -124,6 +113,27 @@ def main():
     #     pickle.dump(result, file)
     #
     # print(result[:3])
+
+
+
+    # #EXPERIMENT 3: NO FINETUNE NO CROSS ENCODER
+    sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions)
+
+    result = [(queries[sem_list[i][0]], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    with open('pretrain_marco_NOce_large_synthetic5.pkl', 'wb') as file:
+        pickle.dump(result, file)
+    print(result[:3])
+
+
+    # #EXPERIMENT 4: Finetuned NO CROSS ENCODER
+    sem_list = semantic_search_No_Cross_Encoder(new_query_index, questions, model='fine_tuned_marco_LARGEmodel2')
+
+    result = [(queries[sem_list[i][0]], sem_list[i][1]) for i in range(len(sem_list))] #range(len(sem_list))
+    with open('finetune_marco_NOce_large_synthetic5.pkl', 'wb') as file:
+        pickle.dump(result, file)
+
+    print(result[:3])
+
 
 
 
