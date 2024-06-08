@@ -45,7 +45,7 @@ def judge(query_top_k, pid, user="chase"):
 		count += 1
 		index = 0
 		for question in top_k:
-			time.sleep(.07)
+			start = time.time()
 			if True:#index % 2 == 0:
 				client = client_chase
 			else:
@@ -67,6 +67,8 @@ def judge(query_top_k, pid, user="chase"):
 			else:
 				print("Error adding 0")
 				results.append(0)
+			end = time.time()
+			time.sleep(max(.55 - (end - start), 0))
 	with open("intermidiate_state_" + str(pid)+ "_llm_judge.pkl", 'wb') as f:
 		pickle.dump(results, f)		
 	#percision = calc_percision(results)
@@ -78,7 +80,7 @@ def main():
 	#files = ["pretrain_all-MiniLM-L6-v2_small_synthetic5.pkl","finetune_all-MiniLM-L6-v2_small_synthetic5.pkl","pretrain_allenai-specter_small_synthetic5.pkl", "finetune_allenai-specter_small_synthetic5.pkl"]
 	#files = ["pretrain_msmarco_CE_small_synthetic.pkl", "fine_tuned_msmarco_CE_small_synthetic.pkl"]
 	#files = ["pretrain_multi-qa-mpnet-base-cos-v1_small_synthetic.pkl", "pretrain_multi-qa-MiniLM-L6-cos-v1_small_synthetic.pkl", "pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl", "pretrain_all-MiniLM-L6-v2_no_max_small_synthetic.pkl"]
-	files = ["pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl"]
+	files = ["finetune_marco_ce_large_synthetic5.pkl"]
 	num_workers = 10
 
 	
