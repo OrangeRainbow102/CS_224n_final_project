@@ -26,6 +26,7 @@ def main():
     with open('old_baseline_small_synthetic5.pkl', 'rb') as file:
         old_baseline_res = pickle.load(file)
 
+    print("length is : ", len(old_baseline_res[0][1]))
     print("Old Baseline SacreBLEU Score is : ", calc_BLEU_score(old_baseline_res))
 
     with open('pretrain_ce_small_synthetic.pkl', 'rb') as file:
@@ -61,8 +62,21 @@ def main():
 
     print("Finetuned allen SacreBLEU Score is : ", calc_BLEU_score(fine_allen_res))
 
+    with open('pretrain_all-MiniLM-L6-v2_no_max_small_synthetic.pkl', 'rb') as file:
+        res = pickle.load(file)
+    print("No max defaul is : ", calc_BLEU_score(res))
+
+
+    with open('pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl', 'rb') as file:
+        res = pickle.load(file)
+    print("No max marco defaul is : ", calc_BLEU_score(res))
+
+    with open('old_baseline_take_2_small_synthetic5.pkl', 'rb') as file:
+        old_bas_2_res = pickle.load(file)
+    print("Old baseline 2 res : ", calc_BLEU_score(old_bas_2_res))
 
 
 
 if __name__ == '__main__':
     main()
+

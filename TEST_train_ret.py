@@ -5,9 +5,19 @@ from sentence_transformers import InputExample, datasets
 from sentence_transformers.evaluation import InformationRetrievalEvaluator
 import wandb
 from sentence_transformers import SentenceTransformer, losses
-def load_synthetic_large_data(pickle_name):
-    with open(pickle_name, 'rb')as file:
-        data = pickle.load(file)
+def load_synthetic_small_data(orig_data, rewritten_data):
+    with open(rewritten_data, 'rb')as file:
+        rewrittens = pickle.load(file)
+
+    with open(orig_data, 'rb') as file:
+        orig = pickle.load(file)
+
+
+    rewrittens.sort(key = lambda x: x[0])
+
+    data = [] #Formatted (Synthetic Query, Document)
+    for i in range(len(rewrittens)):
+        data.append((rewrittens[i][2], orig[rewrittens[i][0]]))
     return data
 
 def get_eval_dictionaries(eval_data):
@@ -49,32 +59,25 @@ def callback_model(score, epoch, steps):
     wandb.log({"train/epoch": epoch,
                "train/steps": steps,
                "val/score": score})
-
-def read_llm_data(pickle_name):
-    #takes in [(synthetic query, doc, ans), ...] returns [(snthetic query, doc), ...]
-    with open(pickle_name, 'rb') as file:
-        data = pickle.load(file)
-
-    return [(data[i][0], data[i][1]) for i in range(len(data))]
 def main():
 
     #See this : https://sbert.net/docs/package_reference/sentence_transformer/losses.html#multiplenegativesrankingloss
 
-    # data is of type [(query1, doc1), (query2, doc2), ...]
-    model_name = "msmarco-distilbert-base-v4"
-    checkpoint_path = "msmarco_LARGE_llm_checkpoints2"
-    model_save_name = "fine_tuned_marco_LARGEmodel2"
+    model_name = "allenai-specter"
+    checkpoint_path = "allenai-specter_checkpoints"
+    model_save_name = "fine_tuned_allenai-specter_small_synthetic"
 
     print("MODEL IS : ", model_name)
-    #train test split:
 
-    train_data = read_llm_data("llm_query_train_sols.pkl")
-    val_data = read_llm_data("llm_query_valid_sols.pkl")
-    test_data = read_llm_data("llm_query_test_sols.pkl")
+    train_data = load_synthetic_small_data("train_data.pkl", "train_queries_100.pkl")
+    test_data = load_synthetic_small_data("test_data.pkl", "test_queries_100.pkl")
+    val_data = load_synthetic_small_data("valid_data.pkl", "valid_queries_100.pkl")
+
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     train_dloader, test_examples, val_examples = load_binary_dataset_retriever(train_data, test_data, val_data)
 
+    print(len(train_dloader))
     val_queries, val_corpus, val_relevent_docs = get_eval_dictionaries(val_data)
     val_evaluator = InformationRetrievalEvaluator(queries=val_queries, corpus=val_corpus, relevant_docs=val_relevent_docs, map_at_k=[10])
     #val_evaluator.primary_metric = 'cosine_accuracy@10'
@@ -108,18 +111,18 @@ def main():
               warmup_steps=warmup_steps,
               show_progress_bar=True,
               evaluator=val_evaluator,
-              evaluation_steps=100,
+              evaluation_steps=10,
               callback=callback_model,
-              checkpoint_save_steps=100,
+              checkpoint_save_steps=10,
               checkpoint_path=checkpoint_path)
 
 
     result_post_fine_tuning = model.evaluate(test_evaluator)
     print("Post-Fine Tuning Evaluation on Test Set : ", result_post_fine_tuning)
-
-
-    #REMEMBER TO UNCOMMENT
-    model.save(model_save_name)
+    #
+    #
+    # #REMEMBER TO UNCOMMENT
+    # model.save(model_save_name)
 
 
 if __name__ == '__main__':

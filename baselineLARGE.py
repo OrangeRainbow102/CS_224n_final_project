@@ -11,28 +11,35 @@ from nltk.translate.bleu_score import sentence_bleu
 
 def main():
 
-    train_filename = "SciQ_dataset/train.json"
-    test_filename = "SciQ_dataset/test.json"
-    train_subset_size = 1083
-    test_subset_size = 97
-    random_seed = 42
-    num_results = 5
-
-    train_reader = Sciq_reader(train_filename, use_random_seed=True, random_seed=random_seed)
-    train_reader.read_data()
-    train_reader.read_data_to_list()
-    train_data = train_reader.problem_list[:train_subset_size]
+    train_pickle = "TODO FROM MACK"
+    test_pickle = "TODO FORM MACK"
+    # train_filename = "SciQ_dataset/train.json"
+    # test_filename = "SciQ_dataset/test.json"
+    # train_subset_size = 1083
+    # test_subset_size = 97
+    # random_seed = 42
+    # num_results = 15
+    #
+    # train_reader = Sciq_reader(train_filename, use_random_seed=True, random_seed=random_seed)
+    # train_reader.read_data()
+    # train_reader.read_data_to_list()
+    # train_data = train_reader.problem_list[:train_subset_size]
 
     # test_reader = Sciq_reader(test_filename, use_random_seed=True, random_seed=random_seed)
     # test_reader.read_data()
     # test_reader.read_data_to_list()
     # test_data = test_reader.problem_list[:test_subset_size]
 
-    with open('test_queries_100.pkl', 'rb') as file:
-        test_queries_raw = pickle.load(file)
-    test_data = [test_queries_raw[i][2] for i in range(len(test_queries_raw))]
-    test_data = test_data[:test_subset_size]
-#
+    with open(train_pickle, 'rb') as file:
+        train_raw = pickle.load(file)
+
+    with open(test_pickle, 'rb') as file:
+        test_raw = pickle.load(file)
+
+
+    train_data = [train_raw[i][1] for i in range(len(train_raw))]
+    test_data = [test_raw[i][0] for i in range(len(test_raw))]
+
     print("Length of train set : ", len(train_data))
     print("Ex of train is : ", train_data[:3])
     print("Length of test set : ", len(test_data))
@@ -72,17 +79,15 @@ def main():
     # print(len(results))
     # print(results[:5])
 
-    with open('old_baseline_take_2_small_synthetic5.pkl', 'wb') as file:
-        # Serialize and save the list
-        pickle.dump(results, file)
+    # with open('old_baseline_small_synthetic5.pkl', 'wb') as file:
+    #     # Serialize and save the list
+    #     pickle.dump(results, file)
 
 
 
     #print("BLEU Baseline Score is : ", calc_BLEU_score(results))
 
     print(results[:3])
-
-    print(len(results[0][1]))
 
 
 def calc_BLEU_score(results):
