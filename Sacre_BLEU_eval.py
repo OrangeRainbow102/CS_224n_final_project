@@ -23,67 +23,69 @@ def calc_BLEU_score(results):
     return BLEU_total / (num_tests * num_results_per_test)
 
 def main():
-    with open('old_baseline_small_synthetic5.pkl', 'rb') as file:
-        old_baseline_res = pickle.load(file)
+    # with open('old_baseline_small_synthetic5.pkl', 'rb') as file:
+    #     old_baseline_res = pickle.load(file)
+    #
+    # print("length is : ", len(old_baseline_res[0][1]))
+    # print("Old Baseline SacreBLEU Score is : ", calc_BLEU_score(old_baseline_res))
+    #
+    # with open('pretrain_ce_small_synthetic.pkl', 'rb') as file:
+    #     msmarco_res = pickle.load(file)
+    #
+    # print("MSmarco SacreBLEU Score is : ", calc_BLEU_score(msmarco_res))
+    #
+    # with open('finetune_ce_small_synthetic5.pkl', 'rb') as file:
+    #     mscarco_finetune_res = pickle.load(file)
+    #
+    # print("MSmarco finetune SacreBLEU Score is : ", calc_BLEU_score(mscarco_finetune_res))
+    #
+    #
+    #
+    # with open('pretrain_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
+    #     mini_res = pickle.load(file)
+    #
+    # print("mini SacreBLEU Score is : ", calc_BLEU_score(mini_res))
+    #
+    # with open('pretrain_allenai-specter_small_synthetic5.pkl', 'rb') as file:
+    #     allen_res = pickle.load(file)
+    #
+    # print("allen SacreBLEU Score is : ", calc_BLEU_score(allen_res))
+    #
+    #
+    # with open('finetune_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
+    #     fine_mini_res = pickle.load(file)
+    #
+    # print("Finetuned mini SacreBLEU Score is : ", calc_BLEU_score(fine_mini_res))
+    #
+    # with open('finetune_allenai-specter_small_synthetic5.pkl', 'rb') as file:
+    #     fine_allen_res = pickle.load(file)
+    #
+    # print("Finetuned allen SacreBLEU Score is : ", calc_BLEU_score(fine_allen_res))
+    #
+    # with open('pretrain_all-MiniLM-L6-v2_no_max_small_synthetic.pkl', 'rb') as file:
+    #     res = pickle.load(file)
+    # print("No max defaul is : ", calc_BLEU_score(res))
+    #
+    #
+    # with open('pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl', 'rb') as file:
+    #     res = pickle.load(file)
+    # print("No max marco defaul is : ", calc_BLEU_score(res))
+    #
+    # with open('old_baseline_take_2_small_synthetic5.pkl', 'rb') as file:
+    #     old_bas_2_res = pickle.load(file)
+    # print("Old baseline 2 res : ", calc_BLEU_score(old_bas_2_res))
+    #
+    #
+    # get_BLEU_score("pretrain_msmarco_CE_small_synthetic.pkl")
+    # get_BLEU_score("fine_tuned_msmarco_CE_small_synthetic.pkl")
+    # get_BLEU_score("pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl")
+    # get_BLEU_score("pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl")
+    # get_BLEU_score("pretrain_marco_NOce_large_synthetic5.pkl")
+    # get_BLEU_score("finetune_marco_ce_large_synthetic5.pkl")
+    # get_BLEU_score("finetune_marco_NOce_large_synthetic5.pkl")
+    # get_BLEU_score("realfinetune_marco_ce_large_synthetic5.pkl")
 
-    print("length is : ", len(old_baseline_res[0][1]))
-    print("Old Baseline SacreBLEU Score is : ", calc_BLEU_score(old_baseline_res))
-
-    with open('pretrain_ce_small_synthetic.pkl', 'rb') as file:
-        msmarco_res = pickle.load(file)
-
-    print("MSmarco SacreBLEU Score is : ", calc_BLEU_score(msmarco_res))
-
-    with open('finetune_ce_small_synthetic5.pkl', 'rb') as file:
-        mscarco_finetune_res = pickle.load(file)
-
-    print("MSmarco finetune SacreBLEU Score is : ", calc_BLEU_score(mscarco_finetune_res))
-
-
-
-    with open('pretrain_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
-        mini_res = pickle.load(file)
-
-    print("mini SacreBLEU Score is : ", calc_BLEU_score(mini_res))
-
-    with open('pretrain_allenai-specter_small_synthetic5.pkl', 'rb') as file:
-        allen_res = pickle.load(file)
-
-    print("allen SacreBLEU Score is : ", calc_BLEU_score(allen_res))
-
-
-    with open('finetune_all-MiniLM-L6-v2_small_synthetic5.pkl', 'rb') as file:
-        fine_mini_res = pickle.load(file)
-
-    print("Finetuned mini SacreBLEU Score is : ", calc_BLEU_score(fine_mini_res))
-
-    with open('finetune_allenai-specter_small_synthetic5.pkl', 'rb') as file:
-        fine_allen_res = pickle.load(file)
-
-    print("Finetuned allen SacreBLEU Score is : ", calc_BLEU_score(fine_allen_res))
-
-    with open('pretrain_all-MiniLM-L6-v2_no_max_small_synthetic.pkl', 'rb') as file:
-        res = pickle.load(file)
-    print("No max defaul is : ", calc_BLEU_score(res))
-
-
-    with open('pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl', 'rb') as file:
-        res = pickle.load(file)
-    print("No max marco defaul is : ", calc_BLEU_score(res))
-
-    with open('old_baseline_take_2_small_synthetic5.pkl', 'rb') as file:
-        old_bas_2_res = pickle.load(file)
-    print("Old baseline 2 res : ", calc_BLEU_score(old_bas_2_res))
-
-
-    get_BLEU_score("pretrain_msmarco_CE_small_synthetic.pkl")
-    get_BLEU_score("fine_tuned_msmarco_CE_small_synthetic.pkl")
-    get_BLEU_score("pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl")
-    get_BLEU_score("pretrain_all-msmarco-distilbert-base-v4_no_max_small_synthetic.pkl")
-    get_BLEU_score("pretrain_marco_NOce_large_synthetic5.pkl")
-    get_BLEU_score("finetune_marco_ce_large_synthetic5.pkl")
-    get_BLEU_score("finetune_marco_NOce_large_synthetic5.pkl")
-    get_BLEU_score("realfinetune_marco_ce_large_synthetic5.pkl")
+    get_BLEU_score("old_baseline_large_synthetic5.pkl")
 
 def get_BLEU_score(pickle_name):
     with open(pickle_name, 'rb') as file:

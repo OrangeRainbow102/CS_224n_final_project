@@ -92,7 +92,7 @@ def main():
 
     num_epochs = 3
     warmup_steps = int(len(train_dloader) * num_epochs * 0.1)
-
+    print("number of warmup steps is : ", warmup_steps)
 
     result_pre_fine_tuning = model.evaluate(test_evaluator)
     print("Pre-Fine Tuning Evaluation on Test Set: ", result_pre_fine_tuning)
@@ -109,9 +109,9 @@ def main():
               show_progress_bar=True,
               evaluator=val_evaluator,
               evaluation_steps=100,
-              callback=callback_model,
-              checkpoint_save_steps=100,
-              checkpoint_path=checkpoint_path)
+              callback=callback_model)
+              # checkpoint_save_steps=100,
+              # checkpoint_path=checkpoint_path)
 
 
     result_post_fine_tuning = model.evaluate(test_evaluator)
